@@ -4,11 +4,14 @@ import studentRoute from './routes/studentRoutes.js'
 import mentorRoutes from './routes/mentorRoutes.js';
 import { connectDB } from './config/db.js';
 import courseroute from './routes/courseRoutes.js';
+import cors from 'cors';
+
+
 
 
 dotenv.config();
 const app = express();
-
+app.use(cors());
 // Connect to DB
 connectDB();
 
