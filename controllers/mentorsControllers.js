@@ -4,7 +4,7 @@ export const signup = async (req, res) => {
     try {
         const mentor = new Mentor(req.body);
         await mentor.save();
-        res.status(200).json('Mentor signup successful');
+        res.status(200).json(`Mentor signup successful whit mentor id ${mentor._id}`);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

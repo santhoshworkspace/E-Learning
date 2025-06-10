@@ -32,7 +32,7 @@ export const postCourse = async (req, res) => {
       const course = new Course({
         title,
         description,
-        mentor: mentorId,
+        mentor: mentorId.trim(),
         videoFilename: filename,
       });
 
@@ -49,7 +49,17 @@ export const postCourse = async (req, res) => {
 export const getCourses = async (req, res) => {
   try {
     const courses = await Course.find().populate('mentor', 'First_name Last_name');
-    res.json(courses);
+    const host = req.headers.host;
+
+    const enhancedCourses = courses.map(course => ({
+      _id: course._id,
+      title: course.title,
+      description: course.description,
+      mentor: course.mentor,
+      videoUrl: `http://${host}/course/video/${course.videoFilename}`
+    }));
+
+    res.json(enhancedCourses);
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch courses', details: err.message });
   }

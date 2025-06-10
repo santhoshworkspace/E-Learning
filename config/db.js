@@ -9,6 +9,7 @@ export const connectDB = async () => {
   gfs = new GridFSBucket(conn.connection.db, {
     bucketName: 'videos'
   });
+  console.log("mongoDB connected")
 };
 
 export const getGFS = () => gfs;
