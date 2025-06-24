@@ -1,18 +1,18 @@
 import express from 'express';
 import upload from '../middleware/multer.js';
-import { postCourse, getCourses } from '../controllers/courseControllers.js';
+import { postCourse, getCourses,buyCourse  } from '../controllers/courseControllers.js';
 import { getGFS } from '../config/db.js';
-
+import { auth } from '../middleware/auth.js';
 const router = express.Router();
 
 // 🔹 Upload a course with video
-router.post('/upload', upload.single('video'), postCourse);
+router.post('/upload',auth, upload.single('video'), postCourse);
 
 // 🔹 Get all courses (with video URLs)
-router.get('/', getCourses);
+router.get('/',auth, getCourses);
 
 // 🔹 Stream a video by filename from GridFS
-router.get('/video/:filename', async (req, res) => {
+router.get('/video/:filename',auth, async (req, res) => {
   try {
     const gfs = getGFS();
     const file = await gfs.find({ filename: req.params.filename }).toArray();
@@ -28,5 +28,8 @@ router.get('/video/:filename', async (req, res) => {
     res.status(500).json({ error: 'Could not stream video', details: err.message });
   }
 });
+
+
+router.post('/buy', auth, buyCourse);
 
 export default router;

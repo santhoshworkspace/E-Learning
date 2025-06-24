@@ -1,9 +1,10 @@
 import Student from '../models/studentModels.js';
-
+import jwt from 'jsonwebtoken'
 export const signup = async(req,res)=>{
     const student = new Student(req.body);
     await student.save();
-    res.status(200).json("signup completed")
+    const token = jwt.sign({userId:student._id},process.env.JWT,{expiresIn:'1h'})
+    res.status(200).json(`signup completed ${token}`)
 };
 
 export const login = async(req,res)=>{
